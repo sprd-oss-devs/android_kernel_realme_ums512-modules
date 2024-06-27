@@ -22,14 +22,14 @@
 # linux build system bootstrap for out-of-tree module
 
 # default to building for the host
-ARCH ?= $(shell uname -m)
+ARCH := arm64
+KDIR := $(KERNEL_SRC)
+CURDIR := $(KERNEL_SRC)/$(M)/mali/tests/kutf
 
-ifeq ($(KDIR),)
-$(error Must specify KDIR to point to the kernel to target))
-endif
+all: modules
 
-all:
-	$(MAKE) ARCH=$(ARCH) -C $(KDIR) M=$(CURDIR) $(SCONS_CONFIGS) EXTRA_CFLAGS=-I$(CURDIR)/../include modules
+modules:
+	$(MAKE) ARCH=$(ARCH) -C $(KDIR) M=$(CURDIR) EXTRA_CFLAGS=-I$(CURDIR)/../include modules
 
 clean:
 	$(MAKE) ARCH=$(ARCH) -C $(KDIR) M=$(CURDIR) clean

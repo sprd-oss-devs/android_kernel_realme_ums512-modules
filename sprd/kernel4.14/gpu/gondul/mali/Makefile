@@ -20,24 +20,14 @@
 #
 
 
-KDIR ?= /lib/modules/$(shell uname -r)/build
+KDIR := $(KERNEL_SRC)
+CURDIR := $(KERNEL_SRC)/$(M)/mali
+M := $(CURDIR)
 
-M ?= $(CURDIR)
-BUSLOG_PATH_RELATIVE = $(CURDIR)/../../../..
-KBASE_PATH_RELATIVE = $(CURDIR)
+all: modules
 
-ifeq ($(MALI_UNIT_TEST), 1)
-	EXTRA_SYMBOLS += $(KBASE_PATH_RELATIVE)/tests/internal/src/kernel_assert_module/linux/Module.symvers
-endif
-
-ifeq ($(CONFIG_MALI_BUSLOG),y)
-#Add bus logger symbols
-EXTRA_SYMBOLS += $(BUSLOG_PATH_RELATIVE)/drivers/base/bus_logger/Module.symvers
-endif
-
-# we get the symbols from modules using KBUILD_EXTRA_SYMBOLS to prevent warnings about unknown functions
-all:
-	$(MAKE) -C $(KDIR) M=$(M) EXTRA_CFLAGS="-I$(CURDIR)/../../../../include -I$(CURDIR)/../../../../tests/include $(SCONS_CFLAGS)" $(SCONS_CONFIGS) KBUILD_EXTRA_SYMBOLS="$(EXTRA_SYMBOLS)" modules
+modules:
+	$(MAKE) -C $(KDIR) M=$(M) modules
 
 clean:
 	$(MAKE) -C $(KDIR) M=$(M) clean

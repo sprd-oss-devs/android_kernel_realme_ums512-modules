@@ -22,11 +22,9 @@
 # linux build system bootstrap for out-of-tree module
 
 # default to building for the host
-ARCH ?= $(shell uname -m)
-
-ifeq ($(KDIR),)
-$(error Must specify KDIR to point to the kernel to target))
-endif
+ARCH := arm64
+CURDIR := $(KERNEL_SRC)/$(M)/mali/tests/mali_kutf_irq_test
+KDIR := $(KERNEL_SRC)
 
 TEST_CCFLAGS := \
 	-DMALI_UNIT_TEST=$(MALI_UNIT_TEST) \
@@ -44,8 +42,10 @@ TEST_CCFLAGS := \
 	-I$(srctree)/drivers/staging/android \
 	-I$(srctree)/include/linux
 
-all:
-	$(MAKE) ARCH=$(ARCH) -C $(KDIR) M=$(CURDIR) $(SCONS_CONFIGS) EXTRA_CFLAGS="$(TEST_CCFLAGS)" KBUILD_EXTRA_SYMBOLS="$(CURDIR)/../kutf/Module.symvers $(CURDIR)/../../Module.symvers" modules
+all: modules
+
+modules:
+	$(MAKE) ARCH=$(ARCH) -C $(KDIR) M=$(CURDIR) EXTRA_CFLAGS="$(TEST_CCFLAGS)" KBUILD_EXTRA_SYMBOLS="$(CURDIR)/../kutf/Module.symvers $(CURDIR)/../../Module.symvers" modules
 
 clean:
 	$(MAKE) ARCH=$(ARCH) -C $(KDIR) M=$(CURDIR) clean
