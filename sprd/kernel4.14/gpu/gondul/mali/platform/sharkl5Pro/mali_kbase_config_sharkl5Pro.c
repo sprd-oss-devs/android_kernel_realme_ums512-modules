@@ -126,7 +126,7 @@ static struct gpu_qos_config gpu_qos_cfg=
 	.awqos_threshold=0,
 };
 
-bool read_memrepaied()
+bool read_memrepaied(void)
 {
 	bool ret = false;
 	if((value & 0x7f800000) == 0x7f800000)
