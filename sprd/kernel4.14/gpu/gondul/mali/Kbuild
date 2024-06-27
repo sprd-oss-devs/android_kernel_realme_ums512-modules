@@ -365,4 +365,5 @@ ccflags-y += -I$(src)/backend/gpu
 subdir-ccflags-y += -I$(src)/backend/gpu
 
 # For kutf and mali_kutf_irq_latency_test
+CONFIG_MALI_KUTF ?= n
 obj-$(CONFIG_MALI_KUTF) += tests/
